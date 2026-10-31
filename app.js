@@ -47,32 +47,32 @@ function findProductIndex(code) {
   return -1;
 }
 
-function validateProductCode(code) {
-  if (code === null) {
+function validateProductCode(code){
+  if (code === null){
     return "Hủy thao tác";
   }
-  if (code.trim() === "") {
+  if (code.trim() === ""){
     return "Lỗi: Chưa nhập mã sản phẩm";
   }
   let upperCode = code.trim().toUpperCase();
-  if (upperCode.length < 6) {
+  if (upperCode.length < 6){
     return "Lỗi: Độ dài nhỏ hơn 6 ký tự";
   }
-  if (!upperCode.startsWith("PRD-")) {
-    return "Lỗi: Sai tiền tố \"PRD-\"";
+  if (!upperCode.startsWith("PRD-")){
+    return "Lỗi: Sai tiền tố (PRD)";
   }
-  for (let i = 0; i < upperCode.length; i++) {
+  for (let i = 0; i < upperCode.length; i++){
     if (upperCode.charAt(i) === " ") {
       return "Lỗi: Chứa khoảng trắng";
     }
   }
-  if (findProductIndex(upperCode) !== -1) {
+  if (findProductIndex(upperCode) !== -1){
     return "Lỗi: Mã sản phẩm đã tồn tại";
   }
   return "";
 }
 
-function inputIntegerInRange(message, min, max) {
+function inputIntegerInRange(message, min, max){
   while (true) {
     let input = prompt(message);
     if (input === null) {
@@ -83,17 +83,17 @@ function inputIntegerInRange(message, min, max) {
       continue;
     }
     let num = Number(trimmed);
-    if (Number.isInteger(num) && num >= min && num <= max) {
+    if (Number.isInteger(num) && num >= min && num <= max){
       return num;
     }
   }
 }
-function displayProducts(list) {
+function displayProducts(list){
   if (!list || list.length === 0) {
     console.log("Danh sách sản phẩm trống");
     return;
   }
-  for (let i = 0; i < list.length; i++) {
+  for (let i = 0; i < list.length; i++){
     let item = list[i];
     console.log(
       (i + 1)+"."+item.productCode +"-"+item.productName+"-" +item.brand +"Số lượng tồn kho:"+item.stockQuantity+"|Số tháng bảo hành:"+item.warrantyMonths
@@ -101,10 +101,10 @@ function displayProducts(list) {
   }
   console.log("Tổng: " + list.length + " sản phẩm");
 }
-function handleDisplayProducts() {
+function handleDisplayProducts(){
   displayProducts(products);
 }
-function handleAddProduct() {
+function handleAddProduct(){
   let rawCode = prompt("Nhập mã sản phẩm mới:");
   if (rawCode === null){
     console.log("Đã hủy thao tác thêm.");
@@ -145,13 +145,13 @@ function handleAddProduct() {
     brand = normalizeText(retryBrand);
   }
 
-  let stockQuantity = inputIntegerInRange("Nhập số lượng tồn kho (0 - 500):");
+  let stockQuantity =inputIntegerInRange("Nhập số lượng tồn kho (0 - 500):");
   if (stockQuantity === null){
     console.log("Đã hủy thao tác thêm.");
     return;
   }
 
-  let warrantyMonths = inputIntegerInRange("Nhập số tháng bảo hành (6 - 36):", 6, 36);
+  let warrantyMonths =inputIntegerInRange("Nhập số tháng bảo hành (6 - 36):");
   if (warrantyMonths === null){
     console.log("Đã hủy thao tác thêm.");
     return;
@@ -172,44 +172,44 @@ function handleAddProduct() {
   console.log("Số lượng tồn kho:"+newProduct.stockQuantity);
   console.log("Số tháng bảo hành:"+newProduct.warrantyMonths);
 }
-function handleUpdateProduct() {
+function handleUpdateProduct(){
   let rawCode=prompt("Nhập mã sản phẩm cần cập nhật:");
-  if (rawCode === null) {
+  if (rawCode === null){
     return;
   }
   let code = rawCode.trim().toUpperCase();
   let index = findProductIndex(code);
-  if (index === -1) {
-    console.log("Không tìm thấy sản phẩm có mã " + code);
+  if (index === -1){
+    console.log("Không tìm thấy sản phẩm có mã"+ code);
     return;
   }
   let currentItem = products[index];
   let oldStock = currentItem.stockQuantity;
   let oldWarranty = currentItem.warrantyMonths;
-  let rawStock = prompt("Nhập số lượng tồn kho mới (0 - 500) (Cancel để giữ nguyên):", currentItem.stockQuantity);
+  let rawStock = prompt("Nhập số lượng tồn kho mới (0 - 500):", currentItem.stockQuantity);
   let stockQuantity = currentItem.stockQuantity;
-  if (rawStock !== null && rawStock.trim() !== "") {
+  if (rawStock !== null && rawStock.trim() !== ""){
     let num = Number(rawStock.trim());
-    if (Number.isInteger(num) && num >= 0 && num <= 500) {
+    if (Number.isInteger(num) && num >= 0 && num <= 500){
       stockQuantity = num;
     }
   }
-  let rawWarranty = prompt("Nhập số tháng bảo hành mới (6 - 36) (Cancel để giữ nguyên):", currentItem.warrantyMonths);
+  let rawWarranty = prompt("Nhập số tháng bảo hành mới (6 - 36):", currentItem.warrantyMonths);
   let warrantyMonths = currentItem.warrantyMonths;
-  if (rawWarranty !== null && rawWarranty.trim() !== "") {
+  if (rawWarranty !== null && rawWarranty.trim() !== ""){
     let num = Number(rawWarranty.trim());
-    if (Number.isInteger(num) && num >= 6 && num <= 36) {
+    if (Number.isInteger(num) && num >= 6 && num <= 36){
       warrantyMonths = num;
     }
   }
-  currentItem.stockQuantity = stockQuantity;
-  currentItem.warrantyMonths = warrantyMonths;
+  currentItem.stockQuantity =stockQuantity;
+  currentItem.warrantyMonths =warrantyMonths;
 
   console.log("Cập nhật thành công");
-  console.log("Số lượng tồn kho trước/sau: " + oldStock + " / " + currentItem.stockQuantity);
-  console.log("Số tháng bảo hành trước/sau: " + oldWarranty + " / " + currentItem.warrantyMonths);
+  console.log("Số lượng tồn kho trước/sau:"+oldStock +"/"+currentItem.stockQuantity);
+  console.log("Số tháng bảo hành trước/sau:"+oldWarranty +"/"+currentItem.warrantyMonths);
 }
-function handleDeleteProduct() {
+function handleDeleteProduct(){
   let rawCode = prompt("Nhập mã sản phẩm cần xóa:");
   if (rawCode === null) {
     console.log("Đã hủy thao tác xóa, còn " + products.length + " sản phẩm");
@@ -218,26 +218,26 @@ function handleDeleteProduct() {
   let code = rawCode.trim().toUpperCase();
   let index = findProductIndex(code);
   if (index === -1) {
-    console.log("Không tìm thấy sản phẩm có mã " + code);
+    console.log("Không tìm thấy sản phẩm có mã"+code);
     return;
   }
   let confirmDelete = prompt("Xác nhận xóa sản phẩm " + code + "? Nhập 'Y' hoặc 'y' để đồng ý:");
-  if (confirmDelete === null || (confirmDelete.trim() !== "Y" && confirmDelete.trim() !== "y")) {
-    console.log("Đã hủy thao tác xóa, còn " + products.length + " sản phẩm");
+  if (confirmDelete === null||(confirmDelete.trim()!=="Y"&&confirmDelete.trim()!== "y")){
+    console.log("Đã hủy thao tác xóa,còn"+products.length +"sản phẩm");
     return;
   }
   products.splice(index, 1);
-  console.log("Xóa thành công, còn " + products.length + " sản phẩm");
+  console.log("Xóa thành công,còn"+products.length+"sản phẩm");
 }
 function handleSearchProduct() {
   let rawKey = prompt("Nhập từ khóa tìm kiếm hãng sản xuất:");
-  if (rawKey === null || rawKey.trim() === "") {
+  if (rawKey === null||rawKey.trim() === "") {
     console.log("Chưa nhập từ khóa tìm kiếm");
     return;
   }
   let keyword = rawKey.trim().toLowerCase();
   let matchedList = [];
-  for (let i = 0; i < products.length; i++) {
+  for (let i = 0; i < products.length; i++){
     let brandLower = products[i].brand.toLowerCase();
     if (brandLower.includes(keyword)) {
       matchedList.push(products[i]);
@@ -250,14 +250,13 @@ function handleSearchProduct() {
   }
 
   let codes = [];
-  for (let i = 0; i < matchedList.length; i++) {
+  for (let i = 0; i < matchedList.length; i++){
     codes.push(matchedList[i].productCode);
   }
-  console.log("Số kết quả: " + matchedList.length);
-  console.log("Mã sản phẩm tìm thấy: " + codes.join(", "));
+  console.log("Số kết quả:"+ matchedList.length);
+  console.log("Mã sản phẩm tìm thấy:"+codes.join(", "));
 }
-
-function displayMenu() {
+function displayMenu(){
   console.log("=====================================================");
   console.log("     HỆ THỐNG QUẢN LÝ SẢN PHẨM TECHZONE              ");
   console.log("=====================================================");
@@ -269,7 +268,6 @@ function displayMenu() {
   console.log("0. Thoát chương trình");
   console.log("=====================================================");
 }
-
 function main() {
   let run = true;
   do {
@@ -306,7 +304,7 @@ function main() {
         handleSearchProduct();
         break;
       case 0:
-        console.log("Cảm ơn bạn đã sử dụng hệ thống TechZone. Tạm biệt!");
+        console.log("Cảm ơn bạn đã sử dụng hệ thống TechZone.");
         run = false;
         break;
       default:
